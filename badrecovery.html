@@ -319,17 +319,16 @@ window.cookieconsent.initialise({
     <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Table of Contents</h4></header>
 <ul class="toc__menu" id="markdown-toc">
   <li><a href="#prerequisites" id="markdown-toc-prerequisites">Prerequisites</a></li>
-  <li><a href="#section-i---downloading-a-recovery-image" id="markdown-toc-section-i---downloading-a-recovery-image">Section I - Downloading a Recovery image</a></li>
-  <li><a href="#section-ii---mod-the-recovery-image" id="markdown-toc-section-ii---mod-the-recovery-image">Section II - Mod the Recovery image</a></li>
-  <li><a href="#section-iii---flashing-the-image" id="markdown-toc-section-iii---flashing-the-image">Section III - Flashing the image</a>    <ul>
-      <li><a href="#across-all-platforms-chromeos-mac-windows-linux-etc" id="markdown-toc-across-all-platforms-chromeos-mac-windows-linux-etc">Across all platforms (ChromeOS, Mac, Windows, Linux, etc.)</a></li>
-      <li><a href="#linux" id="markdown-toc-linux">Linux</a></li>
-      <li><a href="#windows" id="markdown-toc-windows">Windows</a></li>
-      <li><a href="#macos" id="markdown-toc-macos">MacOS</a></li>
+  <li><a href="#section-i---downloading-a-recovery-image" id="markdown-toc-section-i---downloading-a-recovery-image">Section I - Downloading a Recovery Image</a></li>
+  <li><a href="#section-ii---patch-the-recovery-image" id="markdown-toc-section-ii---patch-the-recovery-image">Section II - Patch the Recovery image</a></li>
+  <li><a href="#section-iii---flashing-the-image" id="markdown-toc-section-iii---flashing-the-image">Section III - Flashing the Image</a>    <ul>
+      <li><a href="#on-nix" id="markdown-toc-on-nix">On *nix</a></li>
+      <li><a href="#on-windows" id="markdown-toc-on-windows">On Windows</a></li>
+      <li><a href="#on-macos" id="markdown-toc-on-macos">On MacOS</a></li>
     </ul>
   </li>
   <li><a href="#section-iv---booting-badrecovery" id="markdown-toc-section-iv---booting-badrecovery">Section IV - Booting BadRecovery</a></li>
-  <li><a href="#section-vi--postmodem" id="markdown-toc-section-vi--postmodem">Section VI- Postmodem</a></li>
+  <li><a href="#section-vi---postmodem" id="markdown-toc-section-vi---postmodem">Section VI - Postmodem</a></li>
 </ul>
 
   </nav>
@@ -337,71 +336,55 @@ window.cookieconsent.initialise({
 
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
-  <li>A USB drive, preferably 8gb or larger, for the modded recovery image.</li>
+  <li>A USB drive, preferably 8gb or larger, for the patched recovery image.</li>
 </ul>
 
-<h2 id="section-i---downloading-a-recovery-image">Section I - Downloading a Recovery image</h2>
+<h2 id="section-i---downloading-a-recovery-image">Section I - Downloading a Recovery Image</h2>
 
-<p>First things first, you need to grab a recovery image lower than v125 for your board.</p>
+<p>First, you need a recovery image lower than v125 for your board.</p>
 
 <ul>
   <li>https://chrome100.dev</li>
 </ul>
 
-<h2 id="section-ii---mod-the-recovery-image">Section II - Mod the Recovery image</h2>
+<h2 id="section-ii---patch-the-recovery-image">Section II - Patch the Recovery image</h2>
 
-<p>Vist the <a href="https://binbashbanana.github.io/badrecovery">BadRecovery Web Bulider</a> and upload the RAW recovery image. choose auto and wait a couple of minute and it should download automatically.</p>
+<p>Vist the <a href="https://binbashbanana.github.io/badrecovery">BadRecovery Web Bulider</a> and upload the unpatched (colloquially: “raw”) recovery image. Select <code class="language-plaintext highlighter-rouge">Auto</code> and wait for the process to complete. The patched image should download automatically.</p>
 
-<h2 id="section-iii---flashing-the-image">Section III - Flashing the image</h2>
+<h2 id="section-iii---flashing-the-image">Section III - Flashing the Image</h2>
 
-<p>Did it download automatically? Amazing! Please follow the next instructions for
-flashing.</p>
+<p>Now, we need to flash the recovery image to a USB drive. Follow the below steps for your platform:</p>
 
-<h3 id="across-all-platforms-chromeos-mac-windows-linux-etc">Across all platforms (ChromeOS, Mac, Windows, Linux, etc.)</h3>
+<h3 id="on-nix">On *nix</h3>
 
-<p>If you are using a Chromium browser, Download the Chromebook Recovery Utility and click on “Use Local Image” on the dropdown menu.</p>
+<p class="notice--info">On a ChromeOS device in developer mode, you can also use the following instructions to flash the drive. Otherwise, you can download the <a href="">Chromebook Recovery Utility</a> from the Chrome Webstore and use that to flash the drive. Just click on the top right button in the window and select “Use Local File”, then select your .bin file. This probably won’t work on an enrolled device, but if the extension is unblocked, you can do it entirely on that Chromebook.</p>
 
-<p>Select your modded recovery image you made earlier and click Continue.</p>
+<p>Good choice of operating system, by the way. Most distros will come with the <code class="language-plaintext highlighter-rouge">dd</code> utility built-in. If yours doesn’t, then choose a different distro or find a way to flash the recovery image. Run the following command, making sure that you have the correct /dev path to your USB drive and the correct path to your recovery image:</p>
 
-<p class="notice--danger">WARNING: All data on this USB will be lost. Consider making a backup of the USB
-if this is the only one laying around you.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">dd </span><span class="k">if</span><span class="o">=</span>/path/to/recovery-image.bin <span class="nv">of</span><span class="o">=</span>/dev/sdX <span class="nv">status</span><span class="o">=</span>progress
+</code></pre></div></div>
 
-<p>Once done, you should plug the USB into your chromebook and hit ESC+REFRESH+POWER.
-Recovery should now start. Sit back and relax until the BadRecovery screen pops up.</p>
+<p>In a few minutes, you should be done, and the command should exit with a 0 exit code.</p>
 
-<h3 id="linux">Linux</h3>
+<h3 id="on-windows">On Windows</h3>
 
-<p>Run
-<code class="language-plaintext highlighter-rouge">dd if=/path/to/yourmoddedrecoimage.bin of=/dev/sdWHATEVERYOURUSBIS</code></p>
+<p>Download <a href="https://rufus.ie/">Rufus</a> and run the executable. Select the .bin file you just downloaded and select your USB drive. Click on flash and follow the prompts. If asked, select “Flash in DD mode”.</p>
 
-<p class="notice--danger">MAKE SURE YOU ARE NOT FLASHING TO YOUR INTERNAL DISK! DOING SO WILL
-RESULT IN LOSS OF DATA!</p>
+<h3 id="on-macos">On MacOS</h3>
 
-<p>If all goes well, the command will finish with no errors.
-A 0 exit code is not a error, please ignore that.</p>
-
-<h3 id="windows">Windows</h3>
-<p>Download <a href="https://rufus.ie">Rufus</a>, run the exe and select the raw image. Choose DD mode if prompted. Click START to Continue.</p>
-
-<h3 id="macos">MacOS</h3>
-<p>Download <a href="https://www.balena.io/etcher">Etcher</a> and run the executable/appimage. Click allow for everything. Select the modded reco image and your USB drive.</p>
+<p>Download <a href="https://www.balena.io/etcher">Etcher</a> and run the excutable. Select the .bin file and your USB drive. Click on flash and follow the prompts.</p>
 
 <h2 id="section-iv---booting-badrecovery">Section IV - Booting BadRecovery</h2>
 
-<p>Unlike SH1MMER, DO NOT enter devmode unless you have a ancient board (pre-CR50).</p>
+<p>Unlike SH1mmer, do not enter devmode unless you have a ancient board (pre-CR50).</p>
 
-<p>Instead simply press ESC+REFRESH+POWER and plug in your USB.</p>
+<p>Instead simply enter recovery normally (<code class="language-plaintext highlighter-rouge">Esc+Refresh+Power</code>) and plug in your drive. The recovery process should start, and after a while you should get kicked to a BadRecovery screen. Let it remove FWMP and enable dev mode. If it shows a error about tpmc failing to remove FWMP, your Chromebook is incompatible with the exploit. (This issue is not neccesarily common anymore since the latest version patched this.)</p>
 
-<p>The recovery process should start.</p>
-
-<p>After a while you should get kicked to a BadRecovery screen. Let it remove
-FWMP and enable dev mode. If it shows a error of tpmc failing to remove FWMP, your chromebook is incompatible to the exploit. (This issue is not really common anymore since the latest version patched this.)</p>
-
-<p>Now press Refresh and Power.</p>
+<p>Now, perform an EC reset (<code class="language-plaintext highlighter-rouge">Refresh+Power</code>).</p>
 
 <p class="notice--danger">Please note that your admin can see that your device is offline. If you are not allowed to do this, set your kernver to 0 and reenroll using KVS.</p>
 
-<h2 id="section-vi--postmodem">Section VI- Postmodem</h2>
+<h2 id="section-vi---postmodem">Section VI - Postmodem</h2>
 
 <p class="notice--success">If you want to reenroll but want to unenroll at anytime, continue to <a href="kvs">kvs</a></p>
 
